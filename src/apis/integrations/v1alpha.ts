@@ -2750,7 +2750,7 @@ export namespace integrations_v1alpha {
      */
     requestId?: string | null;
     /**
-     * Optional. Matched against all {@link TriggerConfig\}s across all integrations. i.e. TriggerConfig.trigger_id.equals(trigger_id)
+     * Required. Matched against all {@link TriggerConfig\}s across all integrations. i.e. TriggerConfig.trigger_id.equals(trigger_id). The trigger_id is in the format of `api_trigger/TRIGGER_NAME`.
      */
     triggerId?: string | null;
   }
@@ -7645,7 +7645,7 @@ export namespace integrations_v1alpha {
     }
 
     /**
-     * Lists the status of the integration executions.
+     * Lists the results of all the integration executions. The response includes the same information as the [execution log](https://cloud.google.com/application-integration/docs/viewing-logs) in the Integration UI.
      * @example
      * ```js
      * // Before running the sample:
@@ -7944,7 +7944,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.integrations.versions.archive({
-     *       // Required. The version to archive. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *       // Required. The version to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *       name: 'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *
      *       // Request body metadata
@@ -8090,7 +8090,7 @@ export namespace integrations_v1alpha {
      *     await integrations.projects.locations.integrations.versions.create({
      *       // Set this flag to true, if draft version is to be created for a brand new integration. False, if the request is for an existing integration. For backward compatibility reasons, even if this flag is set to `false` and no existing integration is found, a new draft integration will still be created.
      *       newIntegration: 'placeholder-value',
-     *       // Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\}
+     *       // Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      *       parent:
      *         'projects/my-project/locations/my-location/integrations/my-integration',
      *
@@ -8277,7 +8277,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.integrations.versions.deactivate({
-     *       // Required. The version to deactivate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *       // Required. The version to deactivate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *       name: 'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *
      *       // Request body metadata
@@ -8420,7 +8420,7 @@ export namespace integrations_v1alpha {
      *
      *   // Do the magic
      *   const res = await integrations.projects.locations.integrations.versions.get({
-     *     // Required. The version to retrieve. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *     // Required. The version to retrieve. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *     name: 'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *   });
      *   console.log(res.data);
@@ -8585,7 +8585,7 @@ export namespace integrations_v1alpha {
      *     pageSize: 'placeholder-value',
      *     // A page token, received from a previous `ListIntegrationVersions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListIntegrationVersions` must match the call that provided the page token.
      *     pageToken: 'placeholder-value',
-     *     // Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
+     *     // Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
      *     parent:
      *       'projects/my-project/locations/my-location/integrations/my-integration',
      *   });
@@ -8914,7 +8914,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.integrations.versions.publish({
-     *       // Required. The version to publish. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *       // Required. The version to publish. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *       name: 'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *
      *       // Request body metadata
@@ -9059,7 +9059,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.integrations.versions.takeoverEditLock(
      *       {
-     *         // Required. The version to take over edit lock. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to take over edit lock. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         integrationVersion:
      *           'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *
@@ -9206,7 +9206,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.integrations.versions.validate({
-     *       // Required. The version to validate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *       // Required. The version to validate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *       name: 'projects/my-project/locations/my-location/integrations/my-integration/versions/my-version',
      *
      *       // Request body metadata
@@ -9326,7 +9326,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Archive
     extends StandardParameters {
     /**
-     * Required. The version to archive. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -9342,7 +9342,7 @@ export namespace integrations_v1alpha {
      */
     newIntegration?: boolean;
     /**
-     * Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\}
+     * Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      */
     parent?: string;
 
@@ -9354,7 +9354,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Deactivate
     extends StandardParameters {
     /**
-     * Required. The version to deactivate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to deactivate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -9366,7 +9366,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Get
     extends StandardParameters {
     /**
-     * Required. The version to retrieve. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to retrieve. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
   }
@@ -9393,7 +9393,7 @@ export namespace integrations_v1alpha {
      */
     pageToken?: string;
     /**
-     * Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
+     * Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
      */
     parent?: string;
   }
@@ -9416,7 +9416,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Publish
     extends StandardParameters {
     /**
-     * Required. The version to publish. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to publish. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -9428,7 +9428,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Takeovereditlock
     extends StandardParameters {
     /**
-     * Required. The version to take over edit lock. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to take over edit lock. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     integrationVersion?: string;
 
@@ -9440,7 +9440,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Integrations$Versions$Validate
     extends StandardParameters {
     /**
-     * Required. The version to validate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to validate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -11554,7 +11554,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.products.integrations.archiveBundle({
-     *       // Required. The bundle to archive. Format: projects/{project\}/integrations/{integration\}
+     *       // Required. The bundle to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      *       name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration',
      *
      *       // Request body metadata
@@ -12290,7 +12290,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Archivebundle
     extends StandardParameters {
     /**
-     * Required. The bundle to archive. Format: projects/{project\}/integrations/{integration\}
+     * Required. The bundle to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      */
     name?: string;
 
@@ -12667,7 +12667,7 @@ export namespace integrations_v1alpha {
     }
 
     /**
-     * Lists the status of the integration executions.
+     * Lists the results of all the integration executions. The response includes the same information as the [execution log](https://cloud.google.com/application-integration/docs/viewing-logs) in the Integration UI.
      * @example
      * ```js
      * // Before running the sample:
@@ -13676,7 +13676,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.archive(
      *       {
-     *         // Required. The version to archive. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *
      *         // Request body metadata
@@ -13824,7 +13824,7 @@ export namespace integrations_v1alpha {
      *       {
      *         // Set this flag to true, if draft version is to be created for a brand new integration. False, if the request is for an existing integration. For backward compatibility reasons, even if this flag is set to `false` and no existing integration is found, a new draft integration will still be created.
      *         newIntegration: 'placeholder-value',
-     *         // Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\}
+     *         // Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      *         parent:
      *           'projects/my-project/locations/my-location/products/my-product/integrations/my-integration',
      *
@@ -14013,7 +14013,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.deactivate(
      *       {
-     *         // Required. The version to deactivate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to deactivate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *
      *         // Request body metadata
@@ -14161,7 +14161,7 @@ export namespace integrations_v1alpha {
      *       {
      *         // File format for download request.
      *         fileFormat: 'placeholder-value',
-     *         // Required. The version to download. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to download. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *       }
      *     );
@@ -14302,7 +14302,7 @@ export namespace integrations_v1alpha {
      *   // Do the magic
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.get({
-     *       // Required. The version to retrieve. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *       // Required. The version to retrieve. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *       name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *     });
      *   console.log(res.data);
@@ -14610,7 +14610,7 @@ export namespace integrations_v1alpha {
      *       pageSize: 'placeholder-value',
      *       // A page token, received from a previous `ListIntegrationVersions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListIntegrationVersions` must match the call that provided the page token.
      *       pageToken: 'placeholder-value',
-     *       // Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
+     *       // Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
      *       parent:
      *         'projects/my-project/locations/my-location/products/my-product/integrations/my-integration',
      *     });
@@ -14939,7 +14939,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.publish(
      *       {
-     *         // Required. The version to publish. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to publish. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *
      *         // Request body metadata
@@ -15085,7 +15085,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.takeoverEditLock(
      *       {
-     *         // Required. The version to take over edit lock. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to take over edit lock. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         integrationVersion:
      *           'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *
@@ -15383,7 +15383,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.upload(
      *       {
-     *         // Required. The version to upload. Format: projects/{project\}/integrations/{integration\}
+     *         // Required. The version to upload. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      *         parent:
      *           'projects/my-project/locations/my-location/products/my-product/integrations/my-integration',
      *
@@ -15535,7 +15535,7 @@ export namespace integrations_v1alpha {
      *   const res =
      *     await integrations.projects.locations.products.integrations.versions.validate(
      *       {
-     *         // Required. The version to validate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     *         // Required. The version to validate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      *         name: 'projects/my-project/locations/my-location/products/my-product/integrations/my-integration/versions/my-version',
      *
      *         // Request body metadata
@@ -15656,7 +15656,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Archive
     extends StandardParameters {
     /**
-     * Required. The version to archive. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to archive. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -15672,7 +15672,7 @@ export namespace integrations_v1alpha {
      */
     newIntegration?: boolean;
     /**
-     * Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\}
+     * Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      */
     parent?: string;
 
@@ -15684,7 +15684,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Deactivate
     extends StandardParameters {
     /**
-     * Required. The version to deactivate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to deactivate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -15700,14 +15700,14 @@ export namespace integrations_v1alpha {
      */
     fileFormat?: string;
     /**
-     * Required. The version to download. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to download. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
   }
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Get
     extends StandardParameters {
     /**
-     * Required. The version to retrieve. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to retrieve. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
   }
@@ -15741,7 +15741,7 @@ export namespace integrations_v1alpha {
      */
     pageToken?: string;
     /**
-     * Required. The parent resource where this version will be created. Format: projects/{project\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
+     * Required. The parent resource where this version will be created. Format: projects/{project\}/locations/{location\}/integrations/{integration\} Specifically, when parent equals: 1. projects//locations//integrations/, Meaning: "List versions (with filter) for a particular integration". 2. projects//locations//integrations/- Meaning: "List versions (with filter) for a client within a particular region". 3. projects//locations/-/integrations/- Meaning: "List versions (with filter) for a client".
      */
     parent?: string;
   }
@@ -15764,7 +15764,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Publish
     extends StandardParameters {
     /**
-     * Required. The version to publish. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to publish. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
@@ -15776,7 +15776,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Takeovereditlock
     extends StandardParameters {
     /**
-     * Required. The version to take over edit lock. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to take over edit lock. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     integrationVersion?: string;
 
@@ -15800,7 +15800,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Upload
     extends StandardParameters {
     /**
-     * Required. The version to upload. Format: projects/{project\}/integrations/{integration\}
+     * Required. The version to upload. Format: projects/{project\}/locations/{location\}/integrations/{integration\}
      */
     parent?: string;
 
@@ -15812,7 +15812,7 @@ export namespace integrations_v1alpha {
   export interface Params$Resource$Projects$Locations$Products$Integrations$Versions$Validate
     extends StandardParameters {
     /**
-     * Required. The version to validate. Format: projects/{project\}/integrations/{integration\}/versions/{version\}
+     * Required. The version to validate. Format: projects/{project\}/locations/{location\}/integrations/{integration\}/versions/{version\}
      */
     name?: string;
 
