@@ -604,7 +604,7 @@ export namespace drive_v3 {
     folderColorRgb?: string | null;
     /**
      * The full file extension extracted from the name field. May contain multiple concatenated extensions, such as "tar.gz". This is only available for files with binary content in Google Drive.
-     * This is automatically updated when the name field changes, however it is not cleared if the new name does not contain a valid extension.
+     * This is automatically updated when the name field changes, however it isn't cleared if the new name does not contain a valid extension.
      */
     fullFileExtension?: string | null;
     /**
@@ -742,11 +742,11 @@ export namespace drive_v3 {
      */
     resourceKey?: string | null;
     /**
-     * The SHA1 checksum associated with this file, if available. This field is only populated for files with content stored in Google Drive; it is not populated for Docs Editors or shortcut files.
+     * The SHA1 checksum associated with this file, if available. This field is only populated for files with content stored in Google Drive; it isn't populated for Docs Editors or shortcut files.
      */
     sha1Checksum?: string | null;
     /**
-     * The SHA256 checksum associated with this file, if available. This field is only populated for files with content stored in Google Drive; it is not populated for Docs Editors or shortcut files.
+     * The SHA256 checksum associated with this file, if available. This field is only populated for files with content stored in Google Drive; it isn't populated for Docs Editors or shortcut files.
      */
     sha256Checksum?: string | null;
     /**
