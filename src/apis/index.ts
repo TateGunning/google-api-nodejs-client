@@ -238,6 +238,10 @@ import {
   digitalassetlinks,
 } from './digitalassetlinks';
 import {VERSIONS as discoveryVersions, discovery} from './discovery';
+import {
+  VERSIONS as discoveryengineVersions,
+  discoveryengine,
+} from './discoveryengine';
 import {VERSIONS as displayvideoVersions, displayvideo} from './displayvideo';
 import {VERSIONS as dlpVersions, dlp} from './dlp';
 import {VERSIONS as dnsVersions, dns} from './dns';
@@ -570,6 +574,10 @@ import {
 } from './trafficdirector';
 import {VERSIONS as transcoderVersions, transcoder} from './transcoder';
 import {VERSIONS as translateVersions, translate} from './translate';
+import {
+  VERSIONS as travelimpactmodelVersions,
+  travelimpactmodel,
+} from './travelimpactmodel';
 import {VERSIONS as vaultVersions, vault} from './vault';
 import {VERSIONS as vectortileVersions, vectortile} from './vectortile';
 import {
@@ -598,6 +606,11 @@ import {
   workflowexecutions,
 } from './workflowexecutions';
 import {VERSIONS as workflowsVersions, workflows} from './workflows';
+import {
+  VERSIONS as workloadmanagerVersions,
+  workloadmanager,
+} from './workloadmanager';
+import {VERSIONS as workstationsVersions, workstations} from './workstations';
 import {VERSIONS as youtubeVersions, youtube} from './youtube';
 import {
   VERSIONS as youtubeAnalyticsVersions,
@@ -708,6 +721,7 @@ export const APIS: APIList = {
   dialogflow: dialogflowVersions,
   digitalassetlinks: digitalassetlinksVersions,
   discovery: discoveryVersions,
+  discoveryengine: discoveryengineVersions,
   displayvideo: displayvideoVersions,
   dlp: dlpVersions,
   dns: dnsVersions,
@@ -851,6 +865,7 @@ export const APIS: APIList = {
   trafficdirector: trafficdirectorVersions,
   transcoder: transcoderVersions,
   translate: translateVersions,
+  travelimpactmodel: travelimpactmodelVersions,
   vault: vaultVersions,
   vectortile: vectortileVersions,
   verifiedaccess: verifiedaccessVersions,
@@ -864,6 +879,8 @@ export const APIS: APIList = {
   websecurityscanner: websecurityscannerVersions,
   workflowexecutions: workflowexecutionsVersions,
   workflows: workflowsVersions,
+  workloadmanager: workloadmanagerVersions,
+  workstations: workstationsVersions,
   youtube: youtubeVersions,
   youtubeAnalytics: youtubeAnalyticsVersions,
   youtubereporting: youtubereportingVersions,
@@ -964,6 +981,7 @@ export class GeneratedAPIs {
   dialogflow = dialogflow;
   digitalassetlinks = digitalassetlinks;
   discovery = discovery;
+  discoveryengine = discoveryengine;
   displayvideo = displayvideo;
   dlp = dlp;
   dns = dns;
@@ -1107,6 +1125,7 @@ export class GeneratedAPIs {
   trafficdirector = trafficdirector;
   transcoder = transcoder;
   translate = translate;
+  travelimpactmodel = travelimpactmodel;
   vault = vault;
   vectortile = vectortile;
   verifiedaccess = verifiedaccess;
@@ -1120,6 +1139,8 @@ export class GeneratedAPIs {
   websecurityscanner = websecurityscanner;
   workflowexecutions = workflowexecutions;
   workflows = workflows;
+  workloadmanager = workloadmanager;
+  workstations = workstations;
   youtube = youtube;
   youtubeAnalytics = youtubeAnalytics;
   youtubereporting = youtubereporting;
