@@ -728,7 +728,7 @@ export namespace eventarc_v1 {
      */
     etag?: string | null;
     /**
-     * Required. null The list of filters that applies to event attributes. Only events that match all the provided filters are sent to the destination.
+     * Required. Unordered list. The list of filters that applies to event attributes. Only events that match all the provided filters are sent to the destination.
      */
     eventFilters?: Schema$EventFilter[];
     /**
