@@ -303,6 +303,10 @@ export namespace speech_v1p1beta1 {
      */
     results?: Schema$SpeechRecognitionResult[];
     /**
+     * Provides information on speech adaptation behavior in response
+     */
+    speechAdaptationInfo?: Schema$SpeechAdaptationInfo;
+    /**
      * When available, billed audio seconds for the corresponding request.
      */
     totalBilledTime?: string | null;
@@ -388,7 +392,7 @@ export namespace speech_v1p1beta1 {
      */
     alternativeLanguageCodes?: string[] | null;
     /**
-     * The number of channels in the input audio data. ONLY set this for MULTI-CHANNEL recognition. Valid values for LINEAR16 and FLAC are `1`-`8`. Valid values for OGG_OPUS are '1'-'254'. Valid value for MULAW, AMR, AMR_WB and SPEEX_WITH_HEADER_BYTE is only `1`. If `0` or omitted, defaults to one channel (mono). Note: We only recognize the first channel by default. To perform independent recognition on each channel set `enable_separate_recognition_per_channel` to 'true'.
+     * The number of channels in the input audio data. ONLY set this for MULTI-CHANNEL recognition. Valid values for LINEAR16, OGG_OPUS and FLAC are `1`-`8`. Valid value for MULAW, AMR, AMR_WB and SPEEX_WITH_HEADER_BYTE is only `1`. If `0` or omitted, defaults to one channel (mono). Note: We only recognize the first channel by default. To perform independent recognition on each channel set `enable_separate_recognition_per_channel` to 'true'.
      */
     audioChannelCount?: number | null;
     /**
@@ -535,6 +539,10 @@ export namespace speech_v1p1beta1 {
      */
     results?: Schema$SpeechRecognitionResult[];
     /**
+     * Provides information on adaptation behavior in response
+     */
+    speechAdaptationInfo?: Schema$SpeechAdaptationInfo;
+    /**
      * When available, billed audio seconds for the corresponding request.
      */
     totalBilledTime?: string | null;
@@ -576,6 +584,19 @@ export namespace speech_v1p1beta1 {
      * A collection of phrase sets. To specify the hints inline, leave the phrase set's `name` blank and fill in the rest of its fields. Any phrase set can use any custom class.
      */
     phraseSets?: Schema$PhraseSet[];
+  }
+  /**
+   * Information on speech adaptation use in results
+   */
+  export interface Schema$SpeechAdaptationInfo {
+    /**
+     * Whether there was a timeout when applying speech adaptation. If true, adaptation had no effect in the response transcript.
+     */
+    adaptationTimeout?: boolean | null;
+    /**
+     * If set, returns a message specifying which part of the speech adaptation request timed out.
+     */
+    timeoutMessage?: string | null;
   }
   /**
    * Provides "hints" to the speech recognizer to favor specific words and phrases in the results.
@@ -2681,6 +2702,7 @@ export namespace speech_v1p1beta1 {
      *   // {
      *   //   "requestId": "my_requestId",
      *   //   "results": [],
+     *   //   "speechAdaptationInfo": {},
      *   //   "totalBilledTime": "my_totalBilledTime"
      *   // }
      * }
