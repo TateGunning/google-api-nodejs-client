@@ -272,6 +272,10 @@ export namespace securitycenter_v1 {
      * The additional taxonomy group within findings from a given source.
      */
     findingCategory?: string | null;
+    /**
+     * Full resource name of the finding.
+     */
+    name?: string | null;
   }
   /**
    * Specifies the audit configuration for a service. The configuration determines which permission types are logged, and what identities, if any, are exempted from logging. An AuditConfig must have one or more AuditLogConfigs. If there are AuditConfigs for both `allServices` and a specific service, the union of the two AuditConfigs is used for that service: the log_types specified in each AuditConfig are enabled, and the exempted_members in each AuditLogConfig are exempted. Example Policy with multiple AuditConfigs: { "audit_configs": [ { "service": "allServices", "audit_log_configs": [ { "log_type": "DATA_READ", "exempted_members": [ "user:jose@example.com" ] \}, { "log_type": "DATA_WRITE" \}, { "log_type": "ADMIN_READ" \} ] \}, { "service": "sampleservice.googleapis.com", "audit_log_configs": [ { "log_type": "DATA_READ" \}, { "log_type": "DATA_WRITE", "exempted_members": [ "user:aliya@example.com" ] \} ] \} ] \} For sampleservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ logging. It also exempts `jose@example.com` from DATA_READ logging, and `aliya@example.com` from DATA_WRITE logging.
@@ -679,6 +683,10 @@ export namespace securitycenter_v1 {
      */
     externalUri?: string | null;
     /**
+     * File associated with the finding.
+     */
+    files?: Schema$File[];
+    /**
      * The class of the finding.
      */
     findingClass?: string | null;
@@ -690,6 +698,10 @@ export namespace securitycenter_v1 {
      * Represents what's commonly known as an Indicator of compromise (IoC) in computer forensics. This is an artifact observed on a network or in an operating system that, with high confidence, indicates a computer intrusion. Reference: https://en.wikipedia.org/wiki/Indicator_of_compromise
      */
     indicator?: Schema$Indicator;
+    /**
+     * Kernel Rootkit signature.
+     */
+    kernelRootkit?: Schema$KernelRootkit;
     /**
      * Kubernetes resources associated with the finding.
      */
@@ -751,7 +763,7 @@ export namespace securitycenter_v1 {
      */
     state?: string | null;
     /**
-     * Represents vulnerability specific fields like cve, cvss scores etc. CVE stands for Common Vulnerabilities and Exposures (https://cve.mitre.org/about/)
+     * Represents vulnerability-specific fields like CVE and CVS scores. CVE stands for Common Vulnerabilities and Exposures (https://cve.mitre.org/about/)
      */
     vulnerability?: Schema$Vulnerability;
   }
@@ -937,7 +949,7 @@ export namespace securitycenter_v1 {
      */
     externalUid?: string | null;
     /**
-     * External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     * Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      */
     name?: string | null;
     /**
@@ -1183,9 +1195,17 @@ export namespace securitycenter_v1 {
      */
     name?: string | null;
     /**
+     * Apply resource_value only to resources that match resource_type. resource_type will be checked with "AND" of other resources. E.g. "storage.googleapis.com/Bucket" with resource_value "HIGH" will apply "HIGH" value only to "storage.googleapis.com/Bucket" resources.
+     */
+    resourceType?: string | null;
+    /**
      * Required. Resource value level this expression represents
      */
     resourceValue?: string | null;
+    /**
+     * Project or folder to scope this config to. For example, "project/456" would apply this config only to resources in "project/456" scope will be checked with "AND" of other resources.
+     */
+    scope?: string | null;
     /**
      * Required. Tag values combined with AND to check against. Values in the form "tagValues/123" E.g. [ "tagValues/123", "tagValues/456", "tagValues/789" ] https://cloud.google.com/resource-manager/docs/tags/tags-creating-and-managing
      */
@@ -1363,6 +1383,47 @@ export namespace securitycenter_v1 {
      * The list of URIs associated to the Findings.
      */
     uris?: string[] | null;
+  }
+  /**
+   * Kernel mode rootkit signatures.
+   */
+  export interface Schema$KernelRootkit {
+    /**
+     * Rootkit name when available.
+     */
+    name?: string | null;
+    /**
+     * True when unexpected modifications of kernel read-only data memory are present.
+     */
+    unexpectedCodeModification?: boolean | null;
+    /**
+     * True when `ftrace` points are present with callbacks pointing to regions that are not in the expected kernel or module code range.
+     */
+    unexpectedFtraceHandler?: boolean | null;
+    /**
+     * True when interrupt handlers that are are not in the expected kernel or module code regions are present.
+     */
+    unexpectedInterruptHandler?: boolean | null;
+    /**
+     * True when kernel code pages that are not in the expected kernel or module code regions are present.
+     */
+    unexpectedKernelCodePages?: boolean | null;
+    /**
+     * True when `kprobe` points are present with callbacks pointing to regions that are not in the expected kernel or module code range.
+     */
+    unexpectedKprobeHandler?: boolean | null;
+    /**
+     * True when unexpected processes in the scheduler run queue are present. Such processes are in the run queue, but not in the process task list.
+     */
+    unexpectedProcessesInRunqueue?: boolean | null;
+    /**
+     * Flag indicating unexpected modifications of kernel read-only data memory.
+     */
+    unexpectedReadOnlyDataModification?: boolean | null;
+    /**
+     * True when system call handlers that are are not in the expected kernel or module code regions are present.
+     */
+    unexpectedSystemCallHandler?: boolean | null;
   }
   /**
    * Kubernetes related attributes.
@@ -1612,7 +1673,7 @@ export namespace securitycenter_v1 {
      */
     description?: string | null;
     /**
-     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      */
     name?: string | null;
     /**
@@ -1934,7 +1995,7 @@ export namespace securitycenter_v1 {
     principalSubject?: string | null;
   }
   /**
-   * Request message for updating a finding's state.
+   * Request message for updating a finding's state. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
    */
   export interface Schema$SetFindingStateRequest {
     /**
@@ -2123,7 +2184,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.assets.group({
-     *     // Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'folders/my-folder',
      *
      *     // Request body metadata
@@ -2284,7 +2345,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListAssetsResponse`; indicates that this is a continuation of a prior `ListAssets` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'folders/my-folder',
      *     // Time used as a reference point when filtering assets. The filter is limited to assets existing at the supplied time and their values are those at that specific time. Absence of this field will default to the API's version of NOW.
      *     readTime: 'placeholder-value',
@@ -2544,7 +2605,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Assets$Group
     extends StandardParameters {
     /**
-     * Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
 
@@ -2580,7 +2641,7 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
     /**
@@ -2616,7 +2677,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Creates a big query export.
+     * Creates a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -2644,7 +2705,7 @@ export namespace securitycenter_v1 {
      *   const res = await securitycenter.folders.bigQueryExports.create({
      *     // Required. Unique identifier provided by the client within the parent scope. It must consist of lower case letters, numbers, and hyphen, with the first character a letter, the last a letter or a number, and a 63 character maximum.
      *     bigQueryExportId: 'placeholder-value',
-     *     // Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'folders/my-folder',
      *
      *     // Request body metadata
@@ -2779,7 +2840,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Deletes an existing big query export.
+     * Deletes an existing BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -2805,7 +2866,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.bigQueryExports.delete({
-     *     // Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'folders/my-folder/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -2904,7 +2965,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Gets a big query export.
+     * Gets a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -2930,7 +2991,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.bigQueryExports.get({
-     *     // Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'folders/my-folder/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -3356,7 +3417,7 @@ export namespace securitycenter_v1 {
      */
     bigQueryExportId?: string;
     /**
-     * Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
 
@@ -3368,14 +3429,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Bigqueryexports$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
   export interface Params$Resource$Folders$Bigqueryexports$Get
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
@@ -4402,7 +4463,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.notificationConfigs.create({
-     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      *     configId: 'placeholder-value',
      *     // Required. Resource name of the new notification config's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'folders/my-folder',
@@ -4553,7 +4614,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.notificationConfigs.delete({
-     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'folders/my-folder/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -4678,7 +4739,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.notificationConfigs.get({
-     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'folders/my-folder/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -4816,7 +4877,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListNotificationConfigsResponse`; indicates that this is a continuation of a prior `ListNotificationConfigs` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'folders/my-folder',
      *   });
      *   console.log(res.data);
@@ -4956,7 +5017,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.notificationConfigs.patch({
-     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      *     name: 'folders/my-folder/notificationConfigs/my-notificationConfig',
      *     // The FieldMask to use when updating the notification config. If empty all mutable fields will be updated.
      *     updateMask: 'placeholder-value',
@@ -5081,7 +5142,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Notificationconfigs$Create
     extends StandardParameters {
     /**
-     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      */
     configId?: string;
     /**
@@ -5097,14 +5158,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Notificationconfigs$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
   export interface Params$Resource$Folders$Notificationconfigs$Get
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
@@ -5119,14 +5180,14 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
   }
   export interface Params$Resource$Folders$Notificationconfigs$Patch
     extends StandardParameters {
     /**
-     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      */
     name?: string;
     /**
@@ -5665,9 +5726,11 @@ export namespace securitycenter_v1 {
      *       //   "exfiltration": {},
      *       //   "externalSystems": {},
      *       //   "externalUri": "my_externalUri",
+     *       //   "files": [],
      *       //   "findingClass": "my_findingClass",
      *       //   "iamBindings": [],
      *       //   "indicator": {},
+     *       //   "kernelRootkit": {},
      *       //   "kubernetes": {},
      *       //   "mitreAttack": {},
      *       //   "mute": "my_mute",
@@ -5705,9 +5768,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -5843,7 +5908,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.sources.findings.setMute({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *     // Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      *     name: 'folders/my-folder/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -5872,9 +5937,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -6013,7 +6080,6 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.folders.sources.findings.setState({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
      *     name: 'folders/my-folder/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -6043,9 +6109,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -6372,7 +6440,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Sources$Findings$Setmute
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     * Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      */
     name?: string;
 
@@ -6384,7 +6452,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Sources$Findings$Setstate
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *
      */
     name?: string;
 
@@ -6448,7 +6516,7 @@ export namespace securitycenter_v1 {
      *   // Do the magic
      *   const res =
      *     await securitycenter.folders.sources.findings.externalSystems.patch({
-     *       // External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     *       // Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      *       name: 'folders/my-folder/sources/my-source/findings/my-finding/externalSystems/my-externalSystem',
      *       // The FieldMask to use when updating the external system resource. If empty all mutable fields will be updated.
      *       updateMask: 'placeholder-value',
@@ -6580,7 +6648,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Folders$Sources$Findings$Externalsystems$Patch
     extends StandardParameters {
     /**
-     * External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     * Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      */
     name?: string;
     /**
@@ -6960,7 +7028,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.assets.group({
-     *     // Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'organizations/my-organization',
      *
      *     // Request body metadata
@@ -7121,7 +7189,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListAssetsResponse`; indicates that this is a continuation of a prior `ListAssets` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'organizations/my-organization',
      *     // Time used as a reference point when filtering assets. The filter is limited to assets existing at the supplied time and their values are those at that specific time. Absence of this field will default to the API's version of NOW.
      *     readTime: 'placeholder-value',
@@ -7521,7 +7589,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Assets$Group
     extends StandardParameters {
     /**
-     * Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
 
@@ -7557,7 +7625,7 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
     /**
@@ -7605,7 +7673,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Creates a big query export.
+     * Creates a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -7633,7 +7701,7 @@ export namespace securitycenter_v1 {
      *   const res = await securitycenter.organizations.bigQueryExports.create({
      *     // Required. Unique identifier provided by the client within the parent scope. It must consist of lower case letters, numbers, and hyphen, with the first character a letter, the last a letter or a number, and a 63 character maximum.
      *     bigQueryExportId: 'placeholder-value',
-     *     // Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'organizations/my-organization',
      *
      *     // Request body metadata
@@ -7768,7 +7836,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Deletes an existing big query export.
+     * Deletes an existing BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -7794,7 +7862,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.bigQueryExports.delete({
-     *     // Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'organizations/my-organization/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -7893,7 +7961,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Gets a big query export.
+     * Gets a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -7919,7 +7987,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.bigQueryExports.get({
-     *     // Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'organizations/my-organization/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -8345,7 +8413,7 @@ export namespace securitycenter_v1 {
      */
     bigQueryExportId?: string;
     /**
-     * Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
 
@@ -8357,14 +8425,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Bigqueryexports$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
   export interface Params$Resource$Organizations$Bigqueryexports$Get
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
@@ -9391,7 +9459,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.notificationConfigs.create({
-     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      *     configId: 'placeholder-value',
      *     // Required. Resource name of the new notification config's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'organizations/my-organization',
@@ -9542,7 +9610,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.notificationConfigs.delete({
-     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'organizations/my-organization/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -9667,7 +9735,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.notificationConfigs.get({
-     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'organizations/my-organization/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -9805,7 +9873,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListNotificationConfigsResponse`; indicates that this is a continuation of a prior `ListNotificationConfigs` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'organizations/my-organization',
      *   });
      *   console.log(res.data);
@@ -9945,7 +10013,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.notificationConfigs.patch({
-     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      *     name: 'organizations/my-organization/notificationConfigs/my-notificationConfig',
      *     // The FieldMask to use when updating the notification config. If empty all mutable fields will be updated.
      *     updateMask: 'placeholder-value',
@@ -10070,7 +10138,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Notificationconfigs$Create
     extends StandardParameters {
     /**
-     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      */
     configId?: string;
     /**
@@ -10086,14 +10154,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Notificationconfigs$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
   export interface Params$Resource$Organizations$Notificationconfigs$Get
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
@@ -10108,14 +10176,14 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
   }
   export interface Params$Resource$Organizations$Notificationconfigs$Patch
     extends StandardParameters {
     /**
-     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      */
     name?: string;
     /**
@@ -11837,9 +11905,11 @@ export namespace securitycenter_v1 {
      *       //   "exfiltration": {},
      *       //   "externalSystems": {},
      *       //   "externalUri": "my_externalUri",
+     *       //   "files": [],
      *       //   "findingClass": "my_findingClass",
      *       //   "iamBindings": [],
      *       //   "indicator": {},
+     *       //   "kernelRootkit": {},
      *       //   "kubernetes": {},
      *       //   "mitreAttack": {},
      *       //   "mute": "my_mute",
@@ -11877,9 +11947,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -12344,9 +12416,11 @@ export namespace securitycenter_v1 {
      *       //   "exfiltration": {},
      *       //   "externalSystems": {},
      *       //   "externalUri": "my_externalUri",
+     *       //   "files": [],
      *       //   "findingClass": "my_findingClass",
      *       //   "iamBindings": [],
      *       //   "indicator": {},
+     *       //   "kernelRootkit": {},
      *       //   "kubernetes": {},
      *       //   "mitreAttack": {},
      *       //   "mute": "my_mute",
@@ -12384,9 +12458,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -12522,7 +12598,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.sources.findings.setMute({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *     // Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      *     name: 'organizations/my-organization/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -12551,9 +12627,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -12692,7 +12770,6 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.organizations.sources.findings.setState({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
      *     name: 'organizations/my-organization/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -12722,9 +12799,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -13066,7 +13145,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Sources$Findings$Setmute
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     * Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      */
     name?: string;
 
@@ -13078,7 +13157,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Sources$Findings$Setstate
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *
      */
     name?: string;
 
@@ -13142,7 +13221,7 @@ export namespace securitycenter_v1 {
      *   // Do the magic
      *   const res =
      *     await securitycenter.organizations.sources.findings.externalSystems.patch({
-     *       // External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     *       // Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      *       name: 'organizations/my-organization/sources/my-source/findings/my-finding/externalSystems/my-externalSystem',
      *       // The FieldMask to use when updating the external system resource. If empty all mutable fields will be updated.
      *       updateMask: 'placeholder-value',
@@ -13274,7 +13353,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Organizations$Sources$Findings$Externalsystems$Patch
     extends StandardParameters {
     /**
-     * External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     * Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      */
     name?: string;
     /**
@@ -13344,7 +13423,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.assets.group({
-     *     // Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'projects/my-project',
      *
      *     // Request body metadata
@@ -13505,7 +13584,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListAssetsResponse`; indicates that this is a continuation of a prior `ListAssets` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     *     // Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      *     parent: 'projects/my-project',
      *     // Time used as a reference point when filtering assets. The filter is limited to assets existing at the supplied time and their values are those at that specific time. Absence of this field will default to the API's version of NOW.
      *     readTime: 'placeholder-value',
@@ -13765,7 +13844,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Assets$Group
     extends StandardParameters {
     /**
-     * Required. Name of the organization to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent to groupBy. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
 
@@ -13801,7 +13880,7 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
+     * Required. Name of the parent assets should belong to. Its format is "organizations/[organization_id], folders/[folder_id], or projects/[project_id]".
      */
     parent?: string;
     /**
@@ -13837,7 +13916,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Creates a big query export.
+     * Creates a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -13865,7 +13944,7 @@ export namespace securitycenter_v1 {
      *   const res = await securitycenter.projects.bigQueryExports.create({
      *     // Required. Unique identifier provided by the client within the parent scope. It must consist of lower case letters, numbers, and hyphen, with the first character a letter, the last a letter or a number, and a 63 character maximum.
      *     bigQueryExportId: 'placeholder-value',
-     *     // Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'projects/my-project',
      *
      *     // Request body metadata
@@ -14000,7 +14079,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Deletes an existing big query export.
+     * Deletes an existing BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -14026,7 +14105,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.bigQueryExports.delete({
-     *     // Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'projects/my-project/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -14125,7 +14204,7 @@ export namespace securitycenter_v1 {
     }
 
     /**
-     * Gets a big query export.
+     * Gets a BigQuery export.
      * @example
      * ```js
      * // Before running the sample:
@@ -14151,7 +14230,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.bigQueryExports.get({
-     *     // Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     *     // Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      *     name: 'projects/my-project/bigQueryExports/my-bigQueryExport',
      *   });
      *   console.log(res.data);
@@ -14577,7 +14656,7 @@ export namespace securitycenter_v1 {
      */
     bigQueryExportId?: string;
     /**
-     * Required. Resource name of the new big query export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Resource name of the new BigQuery export's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
 
@@ -14589,14 +14668,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Bigqueryexports$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to delete. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
   export interface Params$Resource$Projects$Bigqueryexports$Get
     extends StandardParameters {
     /**
-     * Required. Name of the big query export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
+     * Required. Name of the BigQuery export to retrieve. Its format is organizations/{organization\}/bigQueryExports/{export_id\}, folders/{folder\}/bigQueryExports/{export_id\}, or projects/{project\}/bigQueryExports/{export_id\}
      */
     name?: string;
   }
@@ -15623,7 +15702,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.notificationConfigs.create({
-     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     *     // Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      *     configId: 'placeholder-value',
      *     // Required. Resource name of the new notification config's parent. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'projects/my-project',
@@ -15774,7 +15853,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.notificationConfigs.delete({
-     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'projects/my-project/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -15899,7 +15978,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.notificationConfigs.get({
-     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     *     // Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      *     name: 'projects/my-project/notificationConfigs/my-notificationConfig',
      *   });
      *   console.log(res.data);
@@ -16037,7 +16116,7 @@ export namespace securitycenter_v1 {
      *     pageSize: 'placeholder-value',
      *     // The value returned by the last `ListNotificationConfigsResponse`; indicates that this is a continuation of a prior `ListNotificationConfigs` call, and that the system should return the next page of data.
      *     pageToken: 'placeholder-value',
-     *     // Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     *     // Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      *     parent: 'projects/my-project',
      *   });
      *   console.log(res.data);
@@ -16177,7 +16256,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.notificationConfigs.patch({
-     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     *     // The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      *     name: 'projects/my-project/notificationConfigs/my-notificationConfig',
      *     // The FieldMask to use when updating the notification config. If empty all mutable fields will be updated.
      *     updateMask: 'placeholder-value',
@@ -16302,7 +16381,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Notificationconfigs$Create
     extends StandardParameters {
     /**
-     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contains alphanumeric characters, underscores or hyphens only.
+     * Required. Unique identifier provided by the client within the parent scope. It must be between 1 and 128 characters, and contain alphanumeric characters, underscores or hyphens only.
      */
     configId?: string;
     /**
@@ -16318,14 +16397,14 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Notificationconfigs$Delete
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to delete. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
   export interface Params$Resource$Projects$Notificationconfigs$Get
     extends StandardParameters {
     /**
-     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]".
+     * Required. Name of the notification config to get. Its format is "organizations/[organization_id]/notificationConfigs/[config_id]", "folders/[folder_id]/notificationConfigs/[config_id]", or "projects/[project_id]/notificationConfigs/[config_id]".
      */
     name?: string;
   }
@@ -16340,14 +16419,14 @@ export namespace securitycenter_v1 {
      */
     pageToken?: string;
     /**
-     * Required. Name of the organization to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
+     * Required. Name of the parent to list notification configs. Its format is "organizations/[organization_id]", "folders/[folder_id]", or "projects/[project_id]".
      */
     parent?: string;
   }
   export interface Params$Resource$Projects$Notificationconfigs$Patch
     extends StandardParameters {
     /**
-     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket".
+     * The relative resource name of this notification config. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/notificationConfigs/notify_public_bucket", "folders/{folder_id\}/notificationConfigs/notify_public_bucket", or "projects/{project_id\}/notificationConfigs/notify_public_bucket".
      */
     name?: string;
     /**
@@ -16886,9 +16965,11 @@ export namespace securitycenter_v1 {
      *       //   "exfiltration": {},
      *       //   "externalSystems": {},
      *       //   "externalUri": "my_externalUri",
+     *       //   "files": [],
      *       //   "findingClass": "my_findingClass",
      *       //   "iamBindings": [],
      *       //   "indicator": {},
+     *       //   "kernelRootkit": {},
      *       //   "kubernetes": {},
      *       //   "mitreAttack": {},
      *       //   "mute": "my_mute",
@@ -16926,9 +17007,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -17064,7 +17147,7 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.sources.findings.setMute({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *     // Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      *     name: 'projects/my-project/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -17093,9 +17176,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -17234,7 +17319,6 @@ export namespace securitycenter_v1 {
      *
      *   // Do the magic
      *   const res = await securitycenter.projects.sources.findings.setState({
-     *     // Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
      *     name: 'projects/my-project/sources/my-source/findings/my-finding',
      *
      *     // Request body metadata
@@ -17264,9 +17348,11 @@ export namespace securitycenter_v1 {
      *   //   "exfiltration": {},
      *   //   "externalSystems": {},
      *   //   "externalUri": "my_externalUri",
+     *   //   "files": [],
      *   //   "findingClass": "my_findingClass",
      *   //   "iamBindings": [],
      *   //   "indicator": {},
+     *   //   "kernelRootkit": {},
      *   //   "kubernetes": {},
      *   //   "mitreAttack": {},
      *   //   "mute": "my_mute",
@@ -17592,7 +17678,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Sources$Findings$Setmute
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/finding/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/finding/{finding_id\}".
+     * Required. The [relative resource name](https://cloud.google.com/apis/design/resource_names#relative_resource_name) of the finding. Example: "organizations/{organization_id\}/sources/{source_id\}/findings/{finding_id\}", "folders/{folder_id\}/sources/{source_id\}/findings/{finding_id\}", "projects/{project_id\}/sources/{source_id\}/findings/{finding_id\}".
      */
     name?: string;
 
@@ -17604,7 +17690,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Sources$Findings$Setstate
     extends StandardParameters {
     /**
-     * Required. The relative resource name of the finding. See: https://cloud.google.com/apis/design/resource_names#relative_resource_name Example: "organizations/{organization_id\}/sources/{source_id\}/finding/{finding_id\}".
+     *
      */
     name?: string;
 
@@ -17668,7 +17754,7 @@ export namespace securitycenter_v1 {
      *   // Do the magic
      *   const res =
      *     await securitycenter.projects.sources.findings.externalSystems.patch({
-     *       // External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     *       // Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      *       name: 'projects/my-project/sources/my-source/findings/my-finding/externalSystems/my-externalSystem',
      *       // The FieldMask to use when updating the external system resource. If empty all mutable fields will be updated.
      *       updateMask: 'placeholder-value',
@@ -17800,7 +17886,7 @@ export namespace securitycenter_v1 {
   export interface Params$Resource$Projects$Sources$Findings$Externalsystems$Patch
     extends StandardParameters {
     /**
-     * External System Name e.g. jira, demisto, etc. e.g.: `organizations/1234/sources/5678/findings/123456/externalSystems/jira` `folders/1234/sources/5678/findings/123456/externalSystems/jira` `projects/1234/sources/5678/findings/123456/externalSystems/jira`
+     * Full resource name of the external system, for example: "organizations/1234/sources/5678/findings/123456/externalSystems/jira", "folders/1234/sources/5678/findings/123456/externalSystems/jira", "projects/1234/sources/5678/findings/123456/externalSystems/jira"
      */
     name?: string;
     /**
