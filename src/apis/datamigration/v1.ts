@@ -207,6 +207,10 @@ export namespace datamigration_v1 {
    */
   export interface Schema$CloudSqlConnectionProfile {
     /**
+     * Output only. The Cloud SQL database instance's additional (outgoing) public IP. Used when the Cloud SQL database availability type is REGIONAL (i.e. multiple zones / highly available).
+     */
+    additionalPublicIp?: string | null;
+    /**
      * Output only. The Cloud SQL instance ID that this connection profile is associated with.
      */
     cloudSqlId?: string | null;
@@ -235,6 +239,10 @@ export namespace datamigration_v1 {
      * [default: ON] If you enable this setting, Cloud SQL checks your available storage every 30 seconds. If the available storage falls below a threshold size, Cloud SQL automatically adds additional storage capacity. If the available storage repeatedly falls below the threshold size, Cloud SQL continues to add storage until it reaches the maximum of 30 TB.
      */
     autoStorageIncrease?: boolean | null;
+    /**
+     * Optional. Availability type. Potential values: * `ZONAL`: The instance serves data from only one zone. Outages in that zone affect data availability. * `REGIONAL`: The instance can serve data from more than one zone in a region (it is highly available).
+     */
+    availabilityType?: string | null;
     /**
      * The KMS key name used for the csql instance.
      */
@@ -271,6 +279,10 @@ export namespace datamigration_v1 {
      * Output only. Indicates If this connection profile root password is stored.
      */
     rootPasswordSet?: boolean | null;
+    /**
+     * Optional. The Google Cloud Platform zone where the failover Cloud SQL database instance is located. Used when the Cloud SQL database availability type is REGIONAL (i.e. multiple zones / highly available).
+     */
+    secondaryZone?: string | null;
     /**
      * The Database Migration Service source connection profile ID, in the format: `projects/my_project_name/locations/us-central1/connectionProfiles/connection_profile_ID`
      */
